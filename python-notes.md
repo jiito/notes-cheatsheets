@@ -40,6 +40,15 @@ Reg Ex Syntax:  https://docs.python.org/2/library/re.html
     print(msg.format("Middlebury")) # will print Middlebury in both spots 
 ```
 
+### Binary
+
+#### print particular length 
+
+will print 2 with 3 places
+```python
+'{0:03b}'.format(2)
+```
+
 ## System
 
 ### Subprocess
