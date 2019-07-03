@@ -118,3 +118,33 @@ virtualenv myenv
 
 source mypython/bin/activate
 ```
+
+## Style
+
+## Docstrings 
+
+see numpy guide [here](https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard) 
+
+#### Good Example
+
+```python
+        '''
+        checkPermissions(file, user, perm)
+
+        Verify the permissions of a specific user 
+            
+        Parameters
+        ----------
+        file: str
+            the path to the file that is being checked
+        user: str
+            the name of the user '' '' '' ''
+        perm: int
+            octal value of permission to check
+
+        Returns
+        -------
+        bool
+            if the user has ALL specified permissions
+        '''
+```
