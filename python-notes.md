@@ -148,3 +148,114 @@ see numpy guide [here](https://numpydoc.readthedocs.io/en/latest/format.html#doc
             if the user has ALL specified permissions
         '''
 ```
+
+## JSON 
+
+### Load Data 
+
+#### From string 
+
+```python
+x =  '{ "name":"John", "age":30, "city":"New York"}'
+
+data = json.loads(x)
+```
+
+#### From file 
+
+```python
+with open("file") as f:
+    data = json.load(f)
+```
+
+## Packages 
+
+### Creating own package
+
+Good resource [here](https://packaging.python.org/tutorials/packaging-projects/)
+
+#### Directory Structure
+
+    /packaging_tutorial
+    /example_pkg
+    __init__.py
+    setup.py
+    LICENSE
+    README.md
+
+#### Creating setup.py
+
+```python
+import setuptools
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setuptools.setup(
+    name="example-pkg-your-username",
+    version="0.0.1",
+    author="Example Author",
+    author_email="author@example.com",
+    description="A small example package",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/pypa/sampleproject",
+    packages=setuptools.find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+)
+```
+
+#### Create README
+
+#### Create LICENSE
+
+[PICK ONE](https://choosealicense.com/)
+
+#### Generating distribution archives
+
+##### Update packages
+
+```bash
+python3 -m pip install --user --upgrade setuptools wheel
+```
+
+```bash
+python3 setup.py sdist bdist_wheel
+```
+
+##### Run
+
+```bash
+python setup.py sdist bdist_wheel
+```
+
+this will create dist file
+
+#### Uploading dist archives 
+
+```bash
+pip install --user --upgrade twine 
+
+twine upload dist/*
+
+``` 
+
+### Uploading 
+
+#### Testing
+
+```bash
+python -m twine upload --repository testpypi dist/*
+```
+
+### Installing 
+
+#### testpypi
+
+#### Good reference
+
+See a good example project [here](https://github.com/instabot-py/instabot.py) 
