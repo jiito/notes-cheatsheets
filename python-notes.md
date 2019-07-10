@@ -211,6 +211,8 @@ setuptools.setup(
 
 #### Create README
 
+Good open source template [here](https://github.com/dbader/readme-template)
+
 #### Create LICENSE
 
 [PICK ONE](https://choosealicense.com/)
@@ -259,3 +261,8 @@ python -m twine upload --repository testpypi dist/*
 #### Good reference
 
 See a good example project [here](https://github.com/instabot-py/instabot.py) 
+
+
+### Testing 
+
+Real python link [here](https://realpython.com/python-testing/)
