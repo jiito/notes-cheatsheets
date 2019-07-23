@@ -21,3 +21,22 @@ docker rm $(docker ps -a -q)
 This will remove all stopped containers by getting a list of all containers with docker ps -a -q and passing their ids to docker rm. This should not remove any running containers, and it will tell you it can’t remove a running image. 
 
 see source [here](https://jimhoskins.com/2013/07/27/remove-untagged-docker-images.html)
+
+## Registry 
+
+### Query 
+
+#### Get all images 
+
+```bash
+curl -X GET https://myregistry:5000/v2/_catalog
+> {"repositories":["redis","ubuntu"]}
+```
+
+#### Get all tags
+
+```bash
+curl -X GET https://myregistry:5000/v2/ubuntu/tags/list
+> {"name":"ubuntu","tags":["14.04"]}
+```
+
