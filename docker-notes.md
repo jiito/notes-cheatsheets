@@ -29,14 +29,16 @@ see source [here](https://jimhoskins.com/2013/07/27/remove-untagged-docker-image
 #### Get all images 
 
 ```bash
-curl -X GET https://myregistry:5000/v2/_catalog
+curl -s -X GET https://myregistry:5000/v2/_catalog
 > {"repositories":["redis","ubuntu"]}
 ```
+
+-s == silent mode 
 
 #### Get all tags
 
 ```bash
-curl -X GET https://myregistry:5000/v2/ubuntu/tags/list
+curl  -s -X GET https://myregistry:5000/v2/ubuntu/tags/list
 > {"name":"ubuntu","tags":["14.04"]}
 ```
 
