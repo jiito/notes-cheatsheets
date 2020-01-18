@@ -32,6 +32,48 @@ rl.question("How do you like node? ", answer => {
 });
 ```
 
-### Write a file
+### Export custom modules 
+
 ```javascript
-const
+// exports Ben
+module.exports = "Ben"
+
+// eg 
+let count = 0;
+
+const inc = () => ++count;
+const dec = () => --count;
+
+const getCount = () => count;
+
+module.exports = {
+    inc,
+    dec,
+    getCount
+};
+
+// in another file 
+const counter = require(PATH);
+
+counter.inc();
+console.log(counter.getCount());
+```
+
+### EventEmitter 
+
+```javascript
+const events = require("events");
+
+const emitter = new events.EventEmitter();
+
+emitter.on("customEvent", (message, user) => {
+    console.log(`${user}: ${message}`)
+});
+
+emitter.emit("customEvent", "Hello World", "Computer");
+emitter.emit("customEvent", "That's pretty cool huh?", "Ben");
+```
+
+## File System Basics 
+
+### List directory files
