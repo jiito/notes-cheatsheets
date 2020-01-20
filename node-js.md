@@ -77,3 +77,126 @@ emitter.emit("customEvent", "That's pretty cool huh?", "Ben");
 ## File System Basics 
 
 ### List directory files
+```javascript
+const fs = require("fs");
+
+const files = fs.readdirSync("./"); // done synchronously 
+
+// a-sync
+fs.readdir("./", (err, files) => {
+    if (err){
+        throw err;
+    }
+    console.log("complete");
+
+})
+```
+
+### Read files 
+
+```javascript 
+const fs = require("fs");
+
+//synchron
+const text = fs.readFileSync(PATH);
+console.log(text);
+
+fs.readFile(PATH, "UTF-8", (err, text) => {
+    if (err) {
+        throw err;
+    }
+    console.log(text)
+
+});
+
+// image read into a buffer  (do not supply encoding)
+fs.readFile(IMAGE, (err, img) => {
+
+});
+```
+
+### write and append files 
+
+```javascript
+
+const fs = require("fs");
+
+const md = `
+# this is a new file 
+
+We can write test to a file with fs.writeFile
+
+`;
+
+fs.writeFile(PATH, md.trim(), err => {
+    if (err) {
+        throw err;
+    }
+    console.log("File saved.")
+});
+
+```
+
+### Directory Creation
+
+```javascript 
+const fs = require("fs");
+
+// check existence 
+if (fs.existsSync(NAME)) {
+
+} else {
+    fs.mkdir(NAME, err => {
+    if (err){
+        throw err;
+    }
+
+    console.log("done")
+});
+};
+
+```
+
+### Append Files 
+
+```javascript
+const fs = require("fs");
+
+fs.append(PATH, VAR);
+```
+
+### rename and remove files
+```javascript 
+const fs = require("fs");
+
+fs.renameSync("NAME", "NEW NAME");
+
+fs.rename("NAME", "NEW NAME", (err) => {
+
+});
+
+setTimeout(() => {
+    fs.unlinkSync("NAME"); //delete
+}, 4000); //4 seconds
+
+```
+
+### remove dir
+```javascript
+
+fs.readdirSync(PATH).forEach(fileName => {
+    fs.unlinkSync(fileName);
+})
+fs.rmdir(NAME, (err) => {
+
+});
+```
+
+## Files and Streams
+
+### Readable File Streams
+
+```javascript
+const fs = require("fs");
+
+const readStream = fs.createReadStream(PATH, ENCODING);
