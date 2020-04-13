@@ -5,6 +5,7 @@
 ## 3 Nodes
 
 - Web server
+  - for server rendering and specifying routes
 - React components (front-end and back-end)
 - API server
 
@@ -229,3 +230,13 @@ use these files to configure the formatters
 
 - Format on save
 - default formatter
+
+## Steps to follow
+
+1. Configure development environment
+2. Build the server
+3. Build the API endpoints
+
+## Questions
+
+- What is the difference between a router and the server?
