@@ -184,41 +184,45 @@ npx eslint --init
 
 use these files to configure the formatters
 
-**.eslintrc.js**
+**.eslintrc**
 
 ```json
 {
   "parser": "babel-eslint",
   "env": {
     "browser": true,
-    "commonjs": true,
     "es6": true,
     "node": true,
-    "jest": true,
+    "jest": true
   },
   "extends": [
     "airbnb-base",
     "prettier",
     "eslint:recommended",
-    "plugin:react/recommended",
+    "plugin:react/recommended"
   ],
   "parserOptions": {
+    "ecmaVersion": 2020,
     "ecmaFeatures": {
-      "jsx": true,
+      "jsx": true
     },
     "sourceType": "module",
+    "codeFrame": false,
+    "allowImportExportEverywhere": false
   },
-  "plugins": ["react", "prettier"],
+  "plugins": ["react", "prettier", "import"],
   "rules": {
-  },
-};
+    "react/prop-types": ["warn"],
+    "spaced-comment": ["error", "always", { "exceptions": ["-", "+"] }]
+  }
+}
 ```
 
 **.prettierrc**
 
 ```json
 {
-  "trailingComma": "es5",
+  "trailingComma": "all",
   "printWidth": 100,
   "singleQuote": true,
   "semi": true,
