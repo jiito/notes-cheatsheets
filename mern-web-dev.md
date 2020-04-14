@@ -72,6 +72,7 @@ These dependencies will be used in production
 - React
 - React-DOM
 - prop-types
+- EJS
 
 ### Dev dependencies
 
