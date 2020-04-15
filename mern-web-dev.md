@@ -84,6 +84,7 @@ npm i -D pkg-name
 
 - Webpack
 - Webpack-cli
+- json-loader (actaully deprecated in new )
 - Babel
   - Babel-loader
   - @babel/node
@@ -235,6 +236,38 @@ use these files to configure the formatters
 
 - Format on save
 - default formatter
+
+## Using Sass
+
+1. Put styles in source directory (./sass)
+2. npm i -S node-sass-middleware
+3. Import and use in server.js
+
+```javascript
+server.use(
+  sassMiddleware({
+    src: path.join(__dirname, "sass"),
+    dest: path.join(__dirname, "public"),
+  })
+);
+```
+
+## Reading from the state
+
+link to [video](https://www.linkedin.com/learning/learning-full-stack-javascript-development-mongodb-node-and-react/reading-from-the-state?u=2213609)
+
+- need to place objects on state
+- proper place to do any modification is in componentDidMount
+
+# Axios (getting data from the API)
+
+[github repo](https://github.com/axios/axios)
+
+```bash
+npm i -S axios
+```
+
+example request
 
 ## Steps to follow
 
