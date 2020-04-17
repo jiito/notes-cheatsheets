@@ -267,7 +267,12 @@ link to [video](https://www.linkedin.com/learning/learning-full-stack-javascript
 npm i -S axios
 ```
 
-example request
+## Server rendering initial data
+
+video link [here](https://www.linkedin.com/learning/learning-full-stack-javascript-development-mongodb-node-and-react/server-rendering-with-reactdomserver?u=2213609)
+
+1. Have a serverRender.js that helps get and render the data
+2. Make sure the components allow for initial data
 
 ## Steps to follow
 
