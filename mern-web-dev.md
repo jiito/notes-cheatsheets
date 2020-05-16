@@ -220,6 +220,8 @@ use these files to configure the formatters
 }
 ```
 
+link to configuring ESLint https://www.linkedin.com/learning/node-js-testing-and-code-quality/configuring-eslint?pathUrn=urn%3Ali%3AlyndaLearningPath%3A5b32b6d5498e4ef39c04c55c&u=2213609
+
 **.prettierrc**
 
 ```json
