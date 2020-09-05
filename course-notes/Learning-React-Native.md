@@ -100,3 +100,8 @@ dataSource: this.ds.cloneWithRows(listOfStuff);
 user `renderRow` to render a componenet for each value
 
 user `renderHeader` to make a nice header for the list
+
+### Collect Data
+
+use `<TextInput>` for textual input
+use `onChangeText={}` attribute
