@@ -29,3 +29,25 @@ Here is a very basic smart contract that had two functions
 We can use [Remix](https://remix.ethereum.org/) which is an ETH IDE. 
 
 
+## ERC-721 
+
+Uploading to IPFS 
+
+```bash 
+ipfs init
+
+# separate win
+ipfs daemon
+
+ipfs add <imagefile>
+```
+
+If you copy the image file's hash you can just add it to the IPFS link “https://ipfs.io/ipfs/” 
+
+1. Create a JSON file with the metadata
+
+
+
+
+## Hardhat
+ChainId for metamask: 31337
