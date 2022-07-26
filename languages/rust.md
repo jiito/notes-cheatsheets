@@ -321,3 +321,65 @@ Using features
 
 ## Testing and documentation 
 ### Unit Tests
+* ` cargo test` 
+* create a mod named tests that holds all the testing code 
+  ```
+  #[cfg(test)]
+  mod tests {
+      // all parent mods
+      use super::*;
+      
+      #[test]
+      fn should_do_something() {
+        let account = SavingsAccount::new();
+        assert_eq!(account.get_balance(), 0)
+      }
+      
+      
+  }
+  ```
+
+* `assert_ne!`
+* `assert!`
+
+will panic on failed assertion
+
+tests that return Result 
+```
+#[test]
+fn should_transfer_money() -> Result<(), String> {
+    ...
+    Ok(())
+}
+```
+
+```
+#[test]
+#[should_panic]
+fn should_panic() {
+   ... 
+}
+```
+
+* convention is to have the tests module with the source code.
+  - inline or seperate file
+
+### Integration test 
+* public interface 
+* stored in top level dir in `/tests`
+* each file will be compiled as a seperate crate for isolation
+* hard to share code 
+ - every file is treated as a test 
+ - use a mod in `utils/mod.rs`--> not a top level file in the tests dir 
+ 
+* integration tests cannot import functionality from binary crates
+
+### Documentation 
+* Doc comments 
+```
+/// Doc comment
+/// # written in markdown
+```
+ - cargo will execute code blocks in doc comments as tests 
+ 
+ - `cargo doc --open` opens the package docs in a webapage
