@@ -107,7 +107,64 @@ impl <Type> {
     }
 }
 ```
+can take ownership of the instance and drop after function 
+```
+impl Product {
+    fn buy(self){
+        ...
+    } // Product instance is dropped here
+}
+```
 
+Associative methods (static)
+```
+impl Product {
+    fn name(){
+       ... 
+    }
+}
 
+Product::name();
+
+```
+There is only one true constructure so you can use a `::new` method to implement some defaults
+
+### Tuple structs
+eg
+```
+struct RGB(i32, i32, i32);
+```
  
+### Enumns
+```
+struct Product {
+    category: ProductCategory
+    ...
+}
+
+enum ProductCategory {
+    Books, 
+    Clothing,
+    Electronics
+}
+
+let category = ProductCategory::Books;
+
+```
+
+```
+enum Command {
+    AddText(String),
+    MoveCursor(i32, i32),
+    Replace {
+        from: String, 
+        to: String
+    }
+}
+```
+
+can also add `impl` blocks to enums 
+
+### Matching
+* expressions are exhaustive so we have to handle every case in the expression 
 
