@@ -216,5 +216,46 @@ let v3 = vec![1, 2, 3];
   
 ## Projects
 ### Structure
+* Packages
+  * Contain one or more crates
+  * must have one crate 
+  
+* Crates
+  * produces library or executable
+* Modules
+  * control organization and scope 
+  
+* `cargo new` --> creates new pkg
+* `main.rs` -> root of bin crate 
+* `lib.rs` -> root or lib crate 
+
+* create `src/bin` to make more binary crates 
+
+### modules 
+Organize code for readability and scope 
+
+* explicitly defined with mod keyword 
 
 
+`cargo install cargo-modules`
+`cargo modules generate tree`
+`cargo modules generate tree --with-types`
+
+
+```
+mod database {
+    ...
+}
+```
+
+* use brings items into scope 
+
+Defining modules in other files 
+
+1. `mod filename;` 
+   - must be declared within the parent module
+   - will automatically look for for file with the name of the module 
+2. Sub modules 
+   - define folder with name of module. 
+   - `mod.rs` is similar to an index file 
+   - rust will look for the mod file inside the module_name directory 
