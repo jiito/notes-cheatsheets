@@ -383,3 +383,104 @@ fn should_panic() {
  - cargo will execute code blocks in doc comments as tests 
  
  - `cargo doc --open` opens the package docs in a webapage
+ 
+### Benchmark Testing 
+TODO: add notes after learning larger concepts
+
+
+# Intermediate 
+
+## Generics and traits
+
+### Generics
+```
+struct BrowserCommand {
+    name: String, 
+    payload: String,
+}
+// if we want to make this more generic... 
+
+struct BrowserCommand<T>{
+    name: String,
+    payload: T,
+}
+```
+
+Impl Blocks 
+```
+impl<T> BrowserCommand<T> {
+
+    fn new(name: String, payload: T) -> Self {
+        BrowserCommand {
+            name,
+            payload
+        }
+    }
+}
+```
+* This makes the impl block for the generic type
+
+Impl block for a concrete type 
+
+```
+impl BrowserCommand<String> {
+    fn print_payload(&self) {
+        println!("{}", self.payload)
+    }
+}
+```
+
+Method that returns a Generic 
+```
+fn get_payload(&self) -> &T {
+    &self.payload
+}
+```
+* no runtime performance cost 
+* creates concrete functions, structs, and impl blocks at compile time and updates the call sites to call the concrete versions
+
+### Traits
+Rust does not support classical inheritance. Instead, traits are use. 
+
+Only functionality can be shared with traits
+
+```
+// needs to be implemented by an impl block
+trait Park {
+    // can have body for a default implementation
+    fn park(&self);
+}
+
+impl Park for Car {
+    fn park(&self) {
+    
+    }
+}
+```
+
+### Trait Bounds
+1. `fn paint_red<T: Paint>(object: &T){}`
+2. `fn paint_red(object: &impl Paint)`
+3. `fn paint_red<T>(object: &T) where T: Paint {}`
+
+Can also be used in returns 
+```
+//only if returning one concrete type
+fn create_paint_object() -> impl Paint() {}
+```
+
+### Supertraits
+Traits can rely on other traits. Traits relied on are called supertraits. 
+
+```
+trait Vehicle: Paint  + Park {
+    fn park(&self);
+}
+```
+### Trait Objects
+Generic must be substituted with one concrete type at compile time. 
+
+Eg: `Box<dyn Pain>`
+use "box smart pointer" and dynamic dispatch 
+**dynamic dispatch** - concrete methods are not known at compile time but figured out at runtime. Runtime performance cost. 
+
