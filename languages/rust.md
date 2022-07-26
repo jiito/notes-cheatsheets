@@ -259,3 +259,65 @@ Defining modules in other files
    - define folder with name of module. 
    - `mod.rs` is similar to an index file 
    - rust will look for the mod file inside the module_name directory 
+   
+   
+
+
+
+
+
+
+
+
+
+
+
+### External dependencies
+* adding a dependency
+  * add to `cargo.toml`
+  `use rand::prelude::*;`
+
+### publishing your package
+* generate token from crates.io 
+`cargo login <token>`
+
+`cargo publish`
+* must commit changes to git first 
+* must have description and license in `cargo.toml`
+
+
+## Structuring larger projects
+### Cargo features 
+1. Parts of code conditionally compiled 
+   - add `features` section in `cargo.toml` 
+2. Include code at compile time 
+   - `#[cfg(feature = "color")]`
+   - only adds code if the features are turned on
+   
+Using features 
+* in `cargo.toml` -> `default-features: false, features = ["feature-name"]`
+
+### Cargo Workspaces 
+* similar to yarn workspaces
+* share a cargo toml 
+* multiple related packages 
+* monolithic packages 
+  - e.g. blog site with API, front-end, and shared code 
+* in `cargo.toml`
+  ```
+  // virtual manifest
+  [workspace]
+  
+  members = [
+      'blog_api',
+      ...
+  ]
+  ```
+  use `cargo new --vcs none pkg_name` to make sure no git directory is added
+
+* target a specific package with `-p`
+* add the local dependencies to the package cargo.toml 
+
+
+## Testing and documentation 
+### Unit Tests
