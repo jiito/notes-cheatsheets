@@ -168,3 +168,53 @@ can also add `impl` blocks to enums
 ### Matching
 * expressions are exhaustive so we have to handle every case in the expression 
 
+### Option 
+```
+emum Option<T> {
+    None,
+    Some(T)
+}
+```
+return `Some(T)` or `None`
+
+### Result
+* Similar to options but for function execution
+
+```
+emun Result<T, E> {
+    Ok(T),
+    Error(E)
+}
+```
+
+`result.ok()` turns a result into an option
+
+### Vectors
+* growable
+* allocate memory on the heap 
+```
+let v: Vec<String> = Vec::new();
+//or 
+let mut v = Vec::new();
+v.push(String::from("one"))
+
+//or 
+
+let v3 = vec![1, 2, 3];
+
+```
+* vector has ownership of the elements 
+* cannot move element out of vector because then the index is pointing at invalid memory 
+  * can be removed with `v.remove()`
+* `v.get(index)` returns and Option
+* Iterating 
+  ```
+  for s in &mut v {
+      s.push_str("!")
+  }
+  ```
+  
+## Projects
+### Structure
+
+
