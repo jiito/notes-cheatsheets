@@ -6,8 +6,9 @@ Lets get rusty bootcamp
 **Table of Contents**
 
 - [Rust](#rust)
-    - [variables](#variables)
-        - [mutatbility](#mutatbility)
+- [Beginner](#beginner)
+    - [Variables](#variables)
+        - [Mutatbility](#mutatbility)
     - [Data types](#data-types)
     - [Const and Static](#const-and-static)
     - [Functions](#functions)
@@ -49,15 +50,19 @@ Lets get rusty bootcamp
         - [The Orphan Rule](#the-orphan-rule)
         - [Traits in the standard library](#traits-in-the-standard-library)
     - [Advanced memory management](#advanced-memory-management)
+        - [Concrete Lifetimes](#concrete-lifetimes)
+        - [Generic Lifetimes](#generic-lifetimes)
+        - [Structs and Lifetime Elision](#structs-and-lifetime-elision)
+        - [Box smart pointer](#box-smart-pointer)
 
 <!-- markdown-toc end -->
 
-
-## variables
+# Beginner 
+## Variables
 
 * rust infers type but type can be specified with `:<type> = `
 
-### mutatbility 
+### Mutatbility 
 * Varaibles are immutable by  default 
 * they can be shadowed by creating another variable with the same name. 
 
@@ -638,3 +643,102 @@ Lifetime Elision Rules
 3. (applies to methods) If there are multiple, but one of them is &self or &mut self, the lifetime of self is assigned to all output lifetime params. 
 
 ### Box smart pointer
+If we want something to be stored on the heap
+```
+let button = Box::new(Button {text: "name".to_owned()})
+```
+single ownership of something on the heap 
+
+use cases: 
+* avoid copying large ammounts of data when transferring ownership 
+* similar to getting a heap pointer from `malloc` in C
+
+[SO Thread on malloc and Box smart pointers](https://stackoverflow.com/questions/48485454/rust-manual-memory-management)
+
+Recursive types 
+
+We cannot make a struct with recursive size like 
+```
+struct Container {
+    name: String,
+    child: Container // won't compile
+}
+```
+
+we instead have to use *indirection*-> use a reference to the recursive type
+```
+struct Container {
+    name: String,
+    child: Box<Container>
+} 
+```
+
+
+### `Rc` smart pointer 
+* Shared ownership 
+** NOT** included in the Rust prelude 
+```
+use std::Rc::rc;
+```
+
+Pass around RC
+```
+let rc = Rc::new(P{})
+Rc::clone(&rc)
+```
+
+* When the Reference count gets to 0, the RC pointer will drop the value it is referencing 
+* can only be used in single-threaded apps
+
+### RefCel Smart pointer
+* Cannot assign to data in Rc smart pointer 
+* Must use a RefCell smart pointer 
+`borrow_mut()` uses the interior mutability pattern 
+* in combination with Rc provides mutability and shared ownership 
+
+Unsafe code!
+```
+let mut r1 = db.borrow_mut();
+let r2 = db.borrow_mut();
+
+r1.max_connections = 200; // will panic at runtime 
+```
+
+### Deref coercion
+* when types do not match 
+* rust compiler coerces a val of one type into another
+* eg: `&Box -> &String -> &str`
+* only works on types that impl `Deref` and `DerefMut` trait. 
+
+```rust
+use std::ops::{Deref, DerefMut};
+
+struct MySmartPointer<T> {
+    value: T
+}
+
+impl<T> MySmartPointer<T> {
+    fn new(value: T) -> MySmartPointer<T> {
+        MySmartPointer {
+            value
+        }
+    }
+}
+
+impl<T> Deref for MySmartPointer<T> {
+    type Target = T;
+    
+    fn deref(&self) -> &Self::Target {
+        &self.value
+    }
+}
+
+impl<T> DerefMut for MySmartPointer<T> {
+    type Target = T;
+    
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.value
+    }
+}
+```
+* should only be implemented on smart pointer types
