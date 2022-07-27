@@ -17,3 +17,10 @@
     `SPC : httpd-start`
 5. In the buffer you want to look at: 
    `SPC : impatient mode`
+
+
+### Adding character at beg of multi-line 
+1. Enter visiual line mode: `SHIFT V` or visiual block mode: `CTRL V`
+2. Select the line you want to edit.
+3. Insert text: `SHIFT i` 
+4. `ESC`
