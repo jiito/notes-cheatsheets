@@ -1,6 +1,53 @@
 # Rust 
 
+
 Lets get rusty bootcamp 
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [Rust](#rust)
+    - [variables](#variables)
+        - [mutatbility](#mutatbility)
+    - [Data types](#data-types)
+    - [Const and Static](#const-and-static)
+    - [Functions](#functions)
+    - [Control flow](#control-flow)
+    - [Memory](#memory)
+        - [ownership](#ownership)
+        - [borrowing](#borrowing)
+        - [slices](#slices)
+    - [Custom Data Types](#custom-data-types)
+        - [Structs](#structs)
+        - [Implementaion blocks](#implementaion-blocks)
+        - [Tuple structs](#tuple-structs)
+        - [Enumns](#enumns)
+        - [Matching](#matching)
+        - [Option](#option)
+        - [Result](#result)
+        - [Vectors](#vectors)
+    - [Projects](#projects)
+        - [Structure](#structure)
+        - [modules](#modules)
+        - [External dependencies](#external-dependencies)
+        - [publishing your package](#publishing-your-package)
+    - [Structuring larger projects](#structuring-larger-projects)
+        - [Cargo features](#cargo-features)
+        - [Cargo Workspaces](#cargo-workspaces)
+    - [Testing and documentation](#testing-and-documentation)
+        - [Unit Tests](#unit-tests)
+        - [Integration test](#integration-test)
+        - [Documentation](#documentation)
+        - [Benchmark Testing](#benchmark-testing)
+- [Intermediate](#intermediate)
+    - [Generics and traits](#generics-and-traits)
+        - [Generics](#generics)
+        - [Traits](#traits)
+        - [Trait Bounds](#trait-bounds)
+        - [Supertraits](#supertraits)
+        - [Trait Objects](#trait-objects)
+
+<!-- markdown-toc end -->
+
 
 ## variables
 
