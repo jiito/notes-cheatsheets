@@ -45,6 +45,10 @@ Lets get rusty bootcamp
         - [Trait Bounds](#trait-bounds)
         - [Supertraits](#supertraits)
         - [Trait Objects](#trait-objects)
+        - [Deriving Traits](#deriving-traits)
+        - [The Orphan Rule](#the-orphan-rule)
+        - [Traits in the standard library](#traits-in-the-standard-library)
+    - [Advanced memory management](#advanced-memory-management)
 
 <!-- markdown-toc end -->
 
@@ -531,3 +535,106 @@ Eg: `Box<dyn Pain>`
 use "box smart pointer" and dynamic dispatch 
 **dynamic dispatch** - concrete methods are not known at compile time but figured out at runtime. Runtime performance cost. 
 
+
+### Deriving Traits 
+
+```
+#[derive(Debug)]
+struct Point{}
+```
+Partial equality
+```
+#[derive(Debug, PartialEq)]
+struct Point{}
+```
+
+### The Orphan Rule
+In order to implement a trait on a type, trait or type needs to be defined in the scope. 
+
+Can create a wrapper type:
+```
+struct PointWrapper(Point);
+
+impl PartialEq for PointWrapper {
+    fn eq(...)
+}
+```
+
+### Traits in the standard library
+TODO: Add notes when video comes out
+
+
+## Advanced memory management
+### Concrete Lifetimes
+* borrow checker checks the lifetime of values 
+* lifetime starts when a value is created or moved 
+* lifetime ends when the value gets dropped 
+
+* checks that a reference does not outlive it's borrow 
+* "non-lexical" lifetimes are not defined by scope and are inferred by the compiler
+
+### Generic Lifetimes 
+* the borrow checker needs to be able to determine the lifetimes of every value so that 
+* describe the relationship between concrete lifetimes
+
+failing code
+```
+fn first_turn(p1: &str, p2: &str) -> &str {
+    if rand::random() {
+        p1
+    } else {
+        p2
+    }
+}
+```
+In this example the compiler is unable to determine which reference is going to be returned at compile time. Since p1 and p2 might have different concrete lifetimes. 
+We have to turn the code into using generic lifetime `<'a>` 
+```
+fn first_turn<'a>(p1: &'a str, p2: &'a str) -> &'a str {
+    if rand::random() {
+        p1
+    } else {
+        p2
+    }
+}
+```
+Describes the *relationship* between concrete lifetimes
+
+**takes the shortest lifetime out of the possible concrete lifetimes**
+* i.e. if p1 lives for longer than p2 then the return value will have the same lifetime as p2 and vice versa. 
+` `static lifetime `
+* lives for the entire life of the program 
+```
+let s: &'static str = "Lets get rusty!"
+s
+```
+
+### Structs and Lifetime Elision
+```
+struct Tweet {
+    content: &str;
+}
+```
+Must add a generic lifetime to store references in structs 
+
+```
+struct Tweet<'a> {
+    content: &'a str, 
+}
+
+impl<'a> Tweet<'a> {
+    fn replace_content(&mut self, content: &'a str) -> &str {
+        let old_content = self.content;
+        self.content = content;
+        old_content
+    }
+}
+
+```
+
+Lifetime Elision Rules
+1. Each parameter that is a ref gets its own lifetime parameter
+2. If there is exactly one input lifetime param, that lifetime is asssigned to all output lifetime parameters 
+3. (applies to methods) If there are multiple, but one of them is &self or &mut self, the lifetime of self is assigned to all output lifetime params. 
+
+### Box smart pointer
