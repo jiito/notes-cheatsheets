@@ -794,4 +794,20 @@ TODO: coming soon!
 
 ### Basics 
 * watch out for `unwrap()` methods!
+
+### Custom Errors
+* use enum with variants to differentiate between errors
+```
+enum CreditCardError {
+    InvalidInput(String),
+    ...
+}
+```
+* `From` trait
+ - can use this to convert from one error type to another without using `map_error`
+
+### thiserror and anyhow 
+* provides derive macros for error trait 
+* reduces the ammount of code you have to write 
+* `anyhow` allows context on errors
 * 
