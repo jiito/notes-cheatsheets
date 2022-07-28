@@ -742,3 +742,56 @@ impl<T> DerefMut for MySmartPointer<T> {
 }
 ```
 * should only be implemented on smart pointer types
+
+## Error handling 
+### Unrecoverable Errors
+* panic causes an error to be printed out and the program to exit abruptly
+* `RUST_BACKTRACE=1` allows for debug output
+
+### Recoverable Errors
+* Use the Result enum
+```
+let file = File::open("example.txt")
+
+let file = match file {
+    Ok(file) => file,
+    Err(error) => {
+        panic!("Failed to open file {:?}", error)
+    }
+}
+// or for faster 
+
+let file = File::open("example.txt").unwrap();
+
+let file = File::open("example.txt").expect("Failed to open file");
+```
+
+### Propograting Errors
+* `?` unwraps Ok() and Some() values or propogates the error or None
+* This will return early in funtions
+
+### Result and Option
+* `and_then` takes a closure (callback fn)
+* `ok()` method takes result and turns to option 
+
+### Multiple Error Types 
+* Used when functions may return multiple types of errors 
+* can use trait object `Box<dyn error::Error>` --> can't handle specific error types
+* custom error erum 
+    ```
+    enum ParseFileError {
+        File, 
+        Parse(ParseIntError)
+    }
+    ```
+    - map using `map_err` method
+
+
+### anyhow and thiserror
+TODO: coming soon!
+
+## Advanced Error Handling
+
+### Basics 
+* watch out for `unwrap()` methods!
+* 
