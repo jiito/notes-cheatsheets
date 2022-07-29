@@ -811,3 +811,48 @@ enum CreditCardError {
 * reduces the ammount of code you have to write 
 * `anyhow` allows context on errors
 * 
+
+
+## Functional Features 
+### Closures 
+* can store as variables or pass as args
+
+```
+let validator = |username: &str, password: &str|{
+    !username.is_empty() && !password.is_empty()
+}
+```
+
+* can store closures in stuct 
+```
+struct Example<T> where T: Fn(&str, &str) -> bool{
+    ...
+    validator: T
+}
+```
+* validators can access binding within the scope it is defined 
+* `move` keyword takes ownership of the values references 
+* passing into function 
+```
+fn get_default_creds<T>(f: T) -> Credentials<T> where T: Fn(&str, &str) -> bool {
+...
+}
+```
+* have to use dynamic dispatch if you are returning two+ closures because no two closures have the same type. 
+
+### function pointers
+* dont capture variables in their environment 
+* closures can be converted into function pointers if they do not capture any values in their environment. 
+* use closures as function arguments!
+
+### Iterator Pattern 
+* allows different types to have similar iterating logic 
+* any type can implement the iterator trait 
+* must implement the `next()` method 
+
+### Combinators
+* `.flatten()` combinator will extract from Some and get rid of None
+* `.collect()` will turn iterator into collection 
+* not called until `next()` is called 
+* a zero cost abstraction 
+
