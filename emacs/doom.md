@@ -17,3 +17,8 @@
     `SPC : httpd-start`
 5. In the buffer you want to look at: 
    `SPC : impatient mode`
+
+
+### Weird rust-analyzer bug
+* If you are working in a rust project, the langauge server will not work if the
+   file is not tracked form the main, i.e. if it is not included with the `mod` keyword 
