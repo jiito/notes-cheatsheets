@@ -137,7 +137,7 @@ Lets get rusty bootcamp
   ` let b: i32 = if a > 5 { 1 } else { -1 }`
   
 * labeling loops 
-  ```
+  ```rust
   `outer: loop {
       loop {
       break `outer;
@@ -185,7 +185,7 @@ Rules
 ## Custom Data Types
 
 ### Structs
-```
+```rust
 struct Product {
     name: String, 
     price: f32, 
@@ -196,7 +196,7 @@ struct Product {
 ### Implementaion blocks 
 implement functionality for a given type 
 
-```
+```rust
 impl <Type> {
     fn (&self) {
         ...
@@ -204,7 +204,7 @@ impl <Type> {
 }
 ```
 can take ownership of the instance and drop after function 
-```
+```rust
 impl Product {
     fn buy(self){
         ...
@@ -213,7 +213,7 @@ impl Product {
 ```
 
 Associative methods (static)
-```
+```rust
 impl Product {
     fn name(){
        ... 
@@ -227,12 +227,12 @@ There is only one true constructure so you can use a `::new` method to implement
 
 ### Tuple structs
 eg
-```
+```rust
 struct RGB(i32, i32, i32);
 ```
  
 ### Enumns
-```
+```rust
 struct Product {
     category: ProductCategory
     ...
@@ -248,7 +248,7 @@ let category = ProductCategory::Books;
 
 ```
 
-```
+```rust
 enum Command {
     AddText(String),
     MoveCursor(i32, i32),
@@ -265,7 +265,7 @@ can also add `impl` blocks to enums
 * expressions are exhaustive so we have to handle every case in the expression 
 
 ### Option 
-```
+```rust
 emum Option<T> {
     None,
     Some(T)
@@ -276,7 +276,7 @@ return `Some(T)` or `None`
 ### Result
 * Similar to options but for function execution
 
-```
+```rust
 emun Result<T, E> {
     Ok(T),
     Error(E)
@@ -288,7 +288,7 @@ emun Result<T, E> {
 ### Vectors
 * growable
 * allocate memory on the heap 
-```
+```rust
 let v: Vec<String> = Vec::new();
 //or 
 let mut v = Vec::new();
@@ -304,7 +304,7 @@ let v3 = vec![1, 2, 3];
   * can be removed with `v.remove()`
 * `v.get(index)` returns and Option
 * Iterating 
-  ```
+  ```rust
   for s in &mut v {
       s.push_str("!")
   }
@@ -338,7 +338,7 @@ Organize code for readability and scope
 `cargo modules generate tree --with-types`
 
 
-```
+```rust
 mod database {
     ...
 }
@@ -400,7 +400,7 @@ Using features
 * monolithic packages 
   - e.g. blog site with API, front-end, and shared code 
 * in `cargo.toml`
-  ```
+  ```rust
   // virtual manifest
   [workspace]
   
@@ -419,7 +419,7 @@ Using features
 ### Unit Tests
 * ` cargo test` 
 * create a mod named tests that holds all the testing code 
-  ```
+  ```rust
   #[cfg(test)]
   mod tests {
       // all parent mods
@@ -441,7 +441,7 @@ Using features
 will panic on failed assertion
 
 tests that return Result 
-```
+```rust
 #[test]
 fn should_transfer_money() -> Result<(), String> {
     ...
@@ -449,7 +449,7 @@ fn should_transfer_money() -> Result<(), String> {
 }
 ```
 
-```
+```rust
 #[test]
 #[should_panic]
 fn should_panic() {
@@ -472,7 +472,7 @@ fn should_panic() {
 
 ### Documentation 
 * Doc comments 
-```
+```rust
 /// Doc comment
 /// # written in markdown
 ```
@@ -503,7 +503,7 @@ struct BrowserCommand<T>{
 ```
 
 Impl Blocks 
-```
+```rust
 impl<T> BrowserCommand<T> {
 
     fn new(name: String, payload: T) -> Self {
@@ -518,7 +518,7 @@ impl<T> BrowserCommand<T> {
 
 Impl block for a concrete type 
 
-```
+```rust
 impl BrowserCommand<String> {
     fn print_payload(&self) {
         println!("{}", self.payload)
@@ -527,7 +527,7 @@ impl BrowserCommand<String> {
 ```
 
 Method that returns a Generic 
-```
+```rust
 fn get_payload(&self) -> &T {
     &self.payload
 }
@@ -540,7 +540,7 @@ Rust does not support classical inheritance. Instead, traits are use.
 
 Only functionality can be shared with traits
 
-```
+```rust
 // needs to be implemented by an impl block
 trait Park {
     // can have body for a default implementation
@@ -560,7 +560,7 @@ impl Park for Car {
 3. `fn paint_red<T>(object: &T) where T: Paint {}`
 
 Can also be used in returns 
-```
+```rust
 //only if returning one concrete type
 fn create_paint_object() -> impl Paint() {}
 ```
@@ -568,7 +568,7 @@ fn create_paint_object() -> impl Paint() {}
 ### Supertraits
 Traits can rely on other traits. Traits relied on are called supertraits. 
 
-```
+```rust
 trait Vehicle: Paint  + Park {
     fn park(&self);
 }
@@ -583,12 +583,12 @@ use "box smart pointer" and dynamic dispatch
 
 ### Deriving Traits 
 
-```
+```rust
 #[derive(Debug)]
 struct Point{}
 ```
 Partial equality
-```
+```rust
 #[derive(Debug, PartialEq)]
 struct Point{}
 ```
@@ -597,7 +597,7 @@ struct Point{}
 In order to implement a trait on a type, trait or type needs to be defined in the scope. 
 
 Can create a wrapper type:
-```
+```rust
 struct PointWrapper(Point);
 
 impl PartialEq for PointWrapper {
@@ -623,7 +623,7 @@ TODO: Add notes when video comes out
 * describe the relationship between concrete lifetimes
 
 failing code
-```
+```rust
 fn first_turn(p1: &str, p2: &str) -> &str {
     if rand::random() {
         p1
@@ -634,7 +634,7 @@ fn first_turn(p1: &str, p2: &str) -> &str {
 ```
 In this example the compiler is unable to determine which reference is going to be returned at compile time. Since p1 and p2 might have different concrete lifetimes. 
 We have to turn the code into using generic lifetime `<'a>` 
-```
+```rust
 fn first_turn<'a>(p1: &'a str, p2: &'a str) -> &'a str {
     if rand::random() {
         p1
@@ -649,20 +649,20 @@ Describes the *relationship* between concrete lifetimes
 * i.e. if p1 lives for longer than p2 then the return value will have the same lifetime as p2 and vice versa. 
 ` `static lifetime `
 * lives for the entire life of the program 
-```
+```rust
 let s: &'static str = "Lets get rusty!"
 s
 ```
 
 ### Structs and Lifetime Elision
-```
+```rust
 struct Tweet {
     content: &str;
 }
 ```
 Must add a generic lifetime to store references in structs 
 
-```
+```rust
 struct Tweet<'a> {
     content: &'a str, 
 }
@@ -684,7 +684,7 @@ Lifetime Elision Rules
 
 ### Box smart pointer
 If we want something to be stored on the heap
-```
+```rust
 let button = Box::new(Button {text: "name".to_owned()})
 ```
 single ownership of something on the heap 
@@ -698,7 +698,7 @@ use cases:
 Recursive types 
 
 We cannot make a struct with recursive size like 
-```
+```rust
 struct Container {
     name: String,
     child: Container // won't compile
@@ -706,7 +706,7 @@ struct Container {
 ```
 
 we instead have to use *indirection*-> use a reference to the recursive type
-```
+```rust
 struct Container {
     name: String,
     child: Box<Container>
@@ -717,12 +717,12 @@ struct Container {
 ### `Rc` smart pointer 
 * Shared ownership 
 ** NOT** included in the Rust prelude 
-```
+```rust
 use std::Rc::rc;
 ```
 
 Pass around RC
-```
+```rust
 let rc = Rc::new(P{})
 Rc::clone(&rc)
 ```
@@ -737,7 +737,7 @@ Rc::clone(&rc)
 * in combination with Rc provides mutability and shared ownership 
 
 Unsafe code!
-```
+```rust
 let mut r1 = db.borrow_mut();
 let r2 = db.borrow_mut();
 
@@ -790,7 +790,7 @@ impl<T> DerefMut for MySmartPointer<T> {
 
 ### Recoverable Errors
 * Use the Result enum
-```
+```rust
 let file = File::open("example.txt")
 
 let file = match file {
@@ -818,7 +818,7 @@ let file = File::open("example.txt").expect("Failed to open file");
 * Used when functions may return multiple types of errors 
 * can use trait object `Box<dyn error::Error>` --> can't handle specific error types
 * custom error erum 
-    ```
+    ```rust
     enum ParseFileError {
         File, 
         Parse(ParseIntError)
@@ -837,7 +837,7 @@ TODO: coming soon!
 
 ### Custom Errors
 * use enum with variants to differentiate between errors
-```
+```rust
 enum CreditCardError {
     InvalidInput(String),
     ...
@@ -857,14 +857,14 @@ enum CreditCardError {
 ### Closures 
 * can store as variables or pass as args
 
-```
+```rust
 let validator = |username: &str, password: &str|{
     !username.is_empty() && !password.is_empty()
 }
 ```
 
 * can store closures in stuct 
-```
+```rust
 struct Example<T> where T: Fn(&str, &str) -> bool{
     ...
     validator: T
@@ -873,7 +873,7 @@ struct Example<T> where T: Fn(&str, &str) -> bool{
 * validators can access binding within the scope it is defined 
 * `move` keyword takes ownership of the values references 
 * passing into function 
-```
+```rust
 fn get_default_creds<T>(f: T) -> Credentials<T> where T: Fn(&str, &str) -> bool {
 ...
 }
@@ -923,7 +923,7 @@ fn main() {
 spawn takes a closure that will be executed in the new thread
 * as soon as the main thread is finished the program exits, need to wait on the new thread using a join handle
 
-```
+```rust
 let handle: JoinHandle<()> ... thread::spawn();
 
 
@@ -939,7 +939,7 @@ handle.join().unwrap()
 * can use the `move` keyword in the closure to take ownership 
 
 ### Message passing between threads 
-```
+```rust
 let (tx, rx) = mpsc::channel();
 
 tx.send().unwrap();
@@ -948,13 +948,13 @@ tx.send().unwrap();
 
 ### Sharing state between threads
 * neee to use a mutex *mutual exclusion*
-```
+```rust
 Mutex::new(..resource..)
 ```
 * must first get a lock 
 * locks wil get dropped when out of scope 
 * might need to use shared ownership with something like an ARC smart pointer 
-```
+```rust
 let db = Arc::new(...)
 ```
 
@@ -966,7 +966,7 @@ let db = Arc::new(...)
 * Sync -> reference can be transfered between threads
 
 ### async/.await basics 
-```
+```rust
 fn main() {
 
 }
@@ -983,13 +983,13 @@ async fn my_function() {
 * `.await` tries to run the future to completion 
 * For top most features, we need a runtime to poll the top level futures and polling them until completion 
 * The std library does not provide and async runtime --> the most popular one is `tokio`
-```
+```rust
 #[tokio::main]
 ```
 
 ### Tokio tasks
 * a task is a non-blocking piece of code 
-```
+```rust
 let mut handles = vec![]
 
 let handle = tokio::spawn()
@@ -1019,7 +1019,7 @@ let handle = tokio::spawn()
 * *after AST is created but before it is validated by sematic analysis*
 
 ### Declarative Macros
-```
+```rust
 
 // (matches) => {expansion aka transcriber}
 
@@ -1034,7 +1034,7 @@ macro_rules! hello {
 * match against the root node of syntax tree
 * meta variables
   * format: `$[identifier] : [fragment-specifier]`
-```
+```rust
 macro_rules! map {
     ($key:ty, $val:ty) => {
         {
@@ -1051,26 +1051,26 @@ macro_rules! map {
 ```
 ### Procedural macro
 * takes token stream as input and returns token stream 
-```
+```toml
 //Cargo.toml
 
 [lib]
 proc-macro = true
 ```
 
-```
+```rust
 extern crate proc_macro;
 
 use proc_macro::{TokenStream};
 ```
 ### Function like
-```
+```rust
 #[proc_macro]
 pub fn log_info(input: TokenStream) -> TokenStream {
     input
 }
 ```
-```
+```toml
 //cargo.toml
 
 [dependencies]
@@ -1082,7 +1082,7 @@ crono
 
 ### Custom Derive
 * automatically implement traits for custom types! 
-```
+```rust
 #[proc_macro_derive(Trait)]
 pub fn log_derive(input: TokenStream) -> TokenStream {
     TokenStream::new()
@@ -1107,7 +1107,7 @@ pub fn log_derive(input: TokenStream) -> TokenStream {
 
 ### 1. Dereference raw pointer 
 `let raw = &mut s as *mut String`--> creating a raw pointer 
-```
+```rust
 unsafe {
     (*raw)...
 }
