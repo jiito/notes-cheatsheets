@@ -54,6 +54,46 @@ Lets get rusty bootcamp
         - [Generic Lifetimes](#generic-lifetimes)
         - [Structs and Lifetime Elision](#structs-and-lifetime-elision)
         - [Box smart pointer](#box-smart-pointer)
+        - [`Rc` smart pointer](#rc-smart-pointer)
+        - [RefCel Smart pointer](#refcel-smart-pointer)
+        - [Deref coercion](#deref-coercion)
+    - [Error handling](#error-handling)
+        - [Unrecoverable Errors](#unrecoverable-errors)
+        - [Recoverable Errors](#recoverable-errors)
+        - [Propograting Errors](#propograting-errors)
+        - [Result and Option](#result-and-option)
+        - [Multiple Error Types](#multiple-error-types)
+        - [anyhow and thiserror](#anyhow-and-thiserror)
+    - [Advanced Error Handling](#advanced-error-handling)
+        - [Basics](#basics)
+        - [Custom Errors](#custom-errors)
+        - [thiserror and anyhow](#thiserror-and-anyhow)
+    - [Functional Features](#functional-features)
+        - [Closures](#closures)
+        - [function pointers](#function-pointers)
+        - [Iterator Pattern](#iterator-pattern)
+        - [Combinators](#combinators)
+    - [Concurrency and async/.await](#concurrency-and-asyncawait)
+        - [Intro to concerrency](#intro-to-concerrency)
+        - [Creating threads](#creating-threads)
+        - [Moving values into threads](#moving-values-into-threads)
+        - [Message passing between threads](#message-passing-between-threads)
+        - [Sharing state between threads](#sharing-state-between-threads)
+        - [Send & Sync Traits](#send--sync-traits)
+        - [async/.await basics](#asyncawait-basics)
+        - [Tokio tasks](#tokio-tasks)
+        - [CPU Intensive code](#cpu-intensive-code)
+        - [Streams](#streams)
+    - [Macro System](#macro-system)
+        - [Intro](#intro)
+        - [Declarative Macros](#declarative-macros)
+        - [Procedural macro](#procedural-macro)
+        - [Function like](#function-like)
+        - [Custom Derive](#custom-derive)
+        - [Atrribute like](#atrribute-like)
+    - [Unsafe Rust and FFI](#unsafe-rust-and-ffi)
+        - [Unsafe basics](#unsafe-basics)
+        - [1. Dereference raw pointer](#1-dereference-raw-pointer)
 
 <!-- markdown-toc end -->
 
@@ -855,4 +895,223 @@ fn get_default_creds<T>(f: T) -> Credentials<T> where T: Fn(&str, &str) -> bool 
 * `.collect()` will turn iterator into collection 
 * not called until `next()` is called 
 * a zero cost abstraction 
+
+## Concurrency and async/.await
+
+### Intro to concerrency 
+* when a process executes, the kernel makes a process for it
+* process has it's own heap, and address space 
+* each process has one or more threads
+* thread -> instructions to execute sequentially 
+* Scheduler (part of the OS) takes threads and passes them to the CPU 
+* programmer has no control of when the schedule decides to execute 
+* concurrency -> parts of the program excuting at the same independently
+* Concurrency can be achieved through time-slicing (one core) or parallel execution (multi-core) 
+* OS threads and Async tasks are the main ways to achieve concurrency in rust 
+
+### Creating threads
+```rs
+use std::thread;
+
+fn main() {
+    thread::spawn(|| {
+        ... new thread
+    })
+
+}
+``` 
+spawn takes a closure that will be executed in the new thread
+* as soon as the main thread is finished the program exits, need to wait on the new thread using a join handle
+
+```
+let handle: JoinHandle<()> ... thread::spawn();
+
+
+
+
+// end of main thrad 
+
+handle.join().unwrap()
+```
+* developer has little control over how threads are executed. 
+
+### Moving values into threads
+* can use the `move` keyword in the closure to take ownership 
+
+### Message passing between threads 
+```
+let (tx, rx) = mpsc::channel();
+
+tx.send().unwrap();
+```
+* can treat the reciever like an iterator
+
+### Sharing state between threads
+* neee to use a mutex *mutual exclusion*
+```
+Mutex::new(..resource..)
+```
+* must first get a lock 
+* locks wil get dropped when out of scope 
+* might need to use shared ownership with something like an ARC smart pointer 
+```
+let db = Arc::new(...)
+```
+
+
+### Send & Sync Traits
+* a label on types  
+* unsafe traits, cannot verify that these properties are enforced 
+* Send ->  ownership can be transfered between threads 
+* Sync -> reference can be transfered between threads
+
+### async/.await basics 
+```
+fn main() {
+
+}
+
+async fn my_function() {
+    println!("THis is async")
+}
+```
+* write async code that looks sync
+
+* async keyword is syntactic sugar for a function that returns something that impl `Future<Output>`
+* futures are similar to promises in JS 
+* have to be driven to completion (awaited)
+* `.await` tries to run the future to completion 
+* For top most features, we need a runtime to poll the top level futures and polling them until completion 
+* The std library does not provide and async runtime --> the most popular one is `tokio`
+```
+#[tokio::main]
+```
+
+### Tokio tasks
+* a task is a non-blocking piece of code 
+```
+let mut handles = vec![]
+
+let handle = tokio::spawn()
+```
+* very similar API to spawning threads 
+* don't want to put CPU intensive operations inside an async funtion 
+
+### CPU Intensive code 
+* blocks all async functions on that thread 
+* can wrap cpu intensive code in `spawn_blocking` which will place it in a seperate thread pool 
+
+### Streams 
+* like async iterators 
+* a good use case is TCP servers that accept connections as a stream 
+
+
+## Macro System
+### Intro 
+* *writing code that writes other code*
+* reduce the ammount of code you have to write 
+* processed during compile time 
+* lexical analysis turns text into tokens that the language understands (identifiers, literals, keywords)
+  * then turned into token trees 
+* Syntax analysis turns token tree into syntax tree 
+* macros are constructed after syntax analysis 
+* semantic analysis works after macros has been expanded 
+* *after AST is created but before it is validated by sematic analysis*
+
+### Declarative Macros
+```
+
+// (matches) => {expansion aka transcriber}
+
+#[macro_export]
+macro_rules! hello {
+    // rule 0
+    () => {
+        println!("hello world")
+    };
+}
+``` 
+* match against the root node of syntax tree
+* meta variables
+  * format: `$[identifier] : [fragment-specifier]`
+```
+macro_rules! map {
+    ($key:ty, $val:ty) => {
+        {
+            let map: HashMap<$key, $val> = HashMap::new();
+            map
+        }
+    };
+    // $( ... ) sep rep
+    ($($key:expr => $val:expr ),*) => {
+    
+    }
+
+}
+```
+### Procedural macro
+* takes token stream as input and returns token stream 
+```
+//Cargo.toml
+
+[lib]
+proc-macro = true
+```
+
+```
+extern crate proc_macro;
+
+use proc_macro::{TokenStream};
+```
+### Function like
+```
+#[proc_macro]
+pub fn log_info(input: TokenStream) -> TokenStream {
+    input
+}
+```
+```
+//cargo.toml
+
+[dependencies]
+quote 
+crono
+```
+
+* `quote!` macro turns rust code into TokenStream
+
+### Custom Derive
+* automatically implement traits for custom types! 
+```
+#[proc_macro_derive(Trait)]
+pub fn log_derive(input: TokenStream) -> TokenStream {
+    TokenStream::new()
+}
+```
+`syn` crate parses into syntax tree that is easier to work with
+
+### Atrribute like 
+* like adding an attribute to annotate functions
+  * `#[log_call(verbose)]`
+  * like a decorator
+
+
+## Unsafe Rust and FFI
+### Unsafe basics 
+* `unsafe {}` 
+1. Dereference a raw pointer 
+2. Call an unsafe function 
+3. Implement an unsafe trait
+4. Access/Modify a mutable static variable
+5. Access fields of a union 
+
+### 1. Dereference raw pointer 
+`let raw = &mut s as *mut String`--> creating a raw pointer 
+```
+unsafe {
+    (*raw)...
+}
+```
+* to achieve greater performance, interface with C, interface with hardware, safe abstractions
+
 
