@@ -23,6 +23,7 @@ Downsample the space.
 
 - JAX is accelerated NumPy designed to be a functional programming paradigm
 - because of this functional programming paradigm, JAX data strucutres are not able to be modified in place and functions should not have side effects.
+- side effects will not be converted to `jaxpr`
 - It allows you to transform functions easily and can be run on many backends (CPU, GPU, TPU)
 - `jax.grad` takes a numerical function and computes the gradient
 
@@ -37,3 +38,9 @@ Downsample the space.
   ```
 
   This saves us from writing long argument lists. JAX uses a data structure called 'pytrees'
+
+#### Simple Training Loop
+
+- It's common to define an update function that is run at every step, taking the current parameters as input and returning the new ones.
+
+### Scenic (from Google)
