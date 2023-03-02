@@ -67,7 +67,62 @@ Dynamic Assignment with ISPC Tasks:
 **Barriers:** an all-to-all synchronization point. All threads must reach the barrier before any can continue.
 
 
-## Link Layer 
-*Responsible for sending and receiving frames*
+## C++ and Shared Memory Primitives  
+* abstraction vs implementation 
+* ISPC task abstraction and implementation 
+* interleavings and synchonization 
 
-- Does not discern meaning from the data (opaque)
+**Explicit vs. Implicit**
+Data parallel: 
+- synchronization : single thread of control, implicit barrier at end of launch
+- Communication: Explicitly via primitive (via dedicated function)
+Shared memory:
+- synchronization: mutual exclusion via lock 
+- communication: implicit via memory 
+
+## ISPC Tasks 
+- Head pointer needs to be protected because multiple threads could be writing to the same location.
+- To need **Synchronization** we need **conflict**=> we need to have some shared variables 
+
+### Task Queue 
+- Two threads can be updating the head at the same time so we need to use a **mutex**
+
+#### Mutex 
+- A mutex is a lock that can be acquired by a thread and released by the same thread.
+
+#### Shared Memory 
+- All accesses to shared memory must be atomic (contained in the critical region)
+- Setup all resources before launching the thread 
+- Make sure outlive their consumer
+  
+### C++
+#### RAII
+*Resource Acquisition Is Initialization*
+- Constructor acquires resource
+- Destructor releases resource
+```cpp
+std::unique_lock<std::mutex> lock(mutex);
+```
+- The lock is released when the unique_lock object goes out of scope
+
+
+## Scheduling 
+
+### Load balancing 
+*ideally all processors do the same amount of work*
+- think of it as creating a portion of the program that is serial (amdahls law)
+
+
+**Static assignment**
+- does not depend on runtime factors
+- Good when the amount of work is known at ahead of time (predictable)
+
+**Dynamic Assignment**
+- e.g. ISPC tasks
+- Good when the amount of work is not known ahead of time (unpredictable)
+
+Synchronization by locks
+- sequential region of the code is created by locks
+- want overhead (locks) relative to the real work to be small
+
+
